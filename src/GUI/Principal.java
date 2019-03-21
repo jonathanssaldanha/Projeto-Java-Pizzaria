@@ -15,11 +15,10 @@ import javax.swing.JFrame;
  */
 public class Principal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal
-     */
+   FundoTela tela;
+   ClienteTela  clientetela;
+   FuncionarioTela  functela;
     
-    FundoTela tela;
     
     public Principal() {
         initComponents();
@@ -43,45 +42,55 @@ public class Principal extends javax.swing.JFrame {
 
         jSlider1 = new javax.swing.JSlider();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem5 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        MenuCadastro = new javax.swing.JMenu();
+        MenuItemClientes = new javax.swing.JMenuItem();
+        MenuItemFuncionarios = new javax.swing.JMenuItem();
+        MenuItemCardapio = new javax.swing.JMenuItem();
+        MenuItemEntregador = new javax.swing.JMenuItem();
+        MenuCaixa = new javax.swing.JMenu();
+        MenuItemPedido = new javax.swing.JMenuItem();
+        MenuRelatorios = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pizzaria_01");
 
-        jMenu1.setText("Cadastro");
+        MenuCadastro.setText("Cadastro");
 
-        jMenuItem1.setText("Clientes");
-        jMenu1.add(jMenuItem1);
+        MenuItemClientes.setText("Clientes");
+        MenuItemClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItemClientesActionPerformed(evt);
+            }
+        });
+        MenuCadastro.add(MenuItemClientes);
 
-        jMenuItem2.setText("Funcionarios");
-        jMenu1.add(jMenuItem2);
+        MenuItemFuncionarios.setText("Funcionarios");
+        MenuItemFuncionarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItemFuncionariosActionPerformed(evt);
+            }
+        });
+        MenuCadastro.add(MenuItemFuncionarios);
 
-        jMenuItem3.setText("Cardapio");
-        jMenu1.add(jMenuItem3);
+        MenuItemCardapio.setText("Cardapio");
+        MenuCadastro.add(MenuItemCardapio);
 
-        jMenuItem4.setText("Entregador");
-        jMenu1.add(jMenuItem4);
+        MenuItemEntregador.setText("Entregador");
+        MenuCadastro.add(MenuItemEntregador);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar1.add(MenuCadastro);
 
-        jMenu2.setText("Caixa");
+        MenuCaixa.setText("Caixa");
 
-        jMenuItem5.setText("Pedido");
-        jMenu2.add(jMenuItem5);
+        MenuItemPedido.setText("Pedido");
+        MenuCaixa.add(MenuItemPedido);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(MenuCaixa);
 
-        jMenu3.setText("Relatorios");
-        jMenuBar1.add(jMenu3);
+        MenuRelatorios.setText("Relatorios");
+        jMenuBar1.add(MenuRelatorios);
 
         jMenu5.setText("Tela de Pedidos");
         jMenuBar1.add(jMenu5);
@@ -104,6 +113,18 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void MenuItemFuncionariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemFuncionariosActionPerformed
+        functela = new FuncionarioTela();
+        tela.add(functela);
+        functela.setVisible(true);
+    }//GEN-LAST:event_MenuItemFuncionariosActionPerformed
+
+    private void MenuItemClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemClientesActionPerformed
+        clientetela = new ClienteTela();
+        tela.add(clientetela);
+        clientetela.setVisible(true);
+    }//GEN-LAST:event_MenuItemClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -141,17 +162,17 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu MenuCadastro;
+    private javax.swing.JMenu MenuCaixa;
+    private javax.swing.JMenuItem MenuItemCardapio;
+    private javax.swing.JMenuItem MenuItemClientes;
+    private javax.swing.JMenuItem MenuItemEntregador;
+    private javax.swing.JMenuItem MenuItemFuncionarios;
+    private javax.swing.JMenuItem MenuItemPedido;
+    private javax.swing.JMenu MenuRelatorios;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JSlider jSlider1;
     // End of variables declaration//GEN-END:variables
 }

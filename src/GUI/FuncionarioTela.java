@@ -6,6 +6,7 @@
 package GUI;
 
 import Beans.FuncionarioBeans;
+import Controller.FuncionarioController;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
@@ -21,13 +22,29 @@ public class FuncionarioTela extends javax.swing.JFrame {
     SimpleDateFormat FormatoData;
     Date DataAtual;
     FuncionarioBeans FuncionarioB;
-    //FuncionarioController FuncionarioC;
+    FuncionarioController FuncionarioC;
     DefaultTableModel Modelo;
     
     
     
     public FuncionarioTela() {
         initComponents();
+        
+        //txt_codigo.setEnabled(false)
+        habilitarCampos(false);
+        
+        FormatoData = new SimpleDateFormat("dd/MM/yyyy");
+        
+        FuncionarioB = new FuncionarioBeans();
+        FuncionarioC = new FuncionarioController();
+        
+        Modelo = (DefaultTableModel)tb_funcionarios.getModel();
+        // Modelo.addRow(new Object[]{1, "Jonathan" , rua, bairro, "1234"});
+        
+        
+        
+        
+        
     }
 
     /**
@@ -45,12 +62,15 @@ public class FuncionarioTela extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        TableFuncionario = new javax.swing.JTable();
-        txtCodigoFuncionario = new javax.swing.JTextField();
-        txtNomeFuncionario = new javax.swing.JTextField();
-        txtDataFuncionario = new javax.swing.JTextField();
-        txtBuscarCliente = new javax.swing.JTextField();
+        tb_funcionarios = new javax.swing.JTable();
+        txtCodigo = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
+        txt_data = new javax.swing.JTextField();
+        txt_buscar = new javax.swing.JTextField();
         cb_cargo = new javax.swing.JComboBox<>();
+        btnNovo = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,7 +84,7 @@ public class FuncionarioTela extends javax.swing.JFrame {
 
         jLabel7.setText("Buscar");
 
-        TableFuncionario.setModel(new javax.swing.table.DefaultTableModel(
+        tb_funcionarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -75,9 +95,20 @@ public class FuncionarioTela extends javax.swing.JFrame {
                 "Codigo", "Nome", "Cargo", "Permissao", "Data"
             }
         ));
-        jScrollPane1.setViewportView(TableFuncionario);
+        jScrollPane1.setViewportView(tb_funcionarios);
 
         cb_cargo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Atendente", "Gerente", "Administrador" }));
+
+        btnNovo.setText("Novo");
+
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
+
+        btnEditar.setText("Editar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,26 +123,32 @@ public class FuncionarioTela extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addGap(21, 21, 21)
-                                .addComponent(txtCodigoFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(19, 19, 19)
-                                .addComponent(txtBuscarCliente))
+                                .addComponent(txt_buscar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtNomeFuncionario)
+                                    .addComponent(txtNome)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(cb_cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
                                         .addComponent(jLabel6)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(txtDataFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(61, 61, 61)))
+                                        .addComponent(txt_data, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(61, 61, 61))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnNovo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSalvar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnEditar)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -120,28 +157,41 @@ public class FuncionarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtCodigoFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNomeFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(cb_cargo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDataFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_data, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addGap(78, 78, 78)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(txtBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_buscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNovo)
+                    .addComponent(btnSalvar)
+                    .addComponent(btnEditar))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        
+       
+        
+        
+        
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,7 +230,9 @@ public class FuncionarioTela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable TableFuncionario;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<String> cb_cargo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -188,10 +240,11 @@ public class FuncionarioTela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField txtBuscarCliente;
-    private javax.swing.JTextField txtCodigoFuncionario;
-    private javax.swing.JTextField txtDataFuncionario;
-    private javax.swing.JTextField txtNomeFuncionario;
+    private javax.swing.JTable tb_funcionarios;
+    private javax.swing.JTextField txtCodigo;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txt_buscar;
+    private javax.swing.JTextField txt_data;
     // End of variables declaration//GEN-END:variables
 
     
@@ -206,23 +259,23 @@ public class FuncionarioTela extends javax.swing.JFrame {
     
     
     final void habilitarCampos(boolean valor){
-        txtCodigoFuncionario.setEnabled(valor);
-        txtNomeFuncionario.setEnabled(valor);
+        txtCodigo.setEnabled(valor);
+        txtNome.setEnabled(valor);
         cb_cargo.setEnabled(valor);
-        txtDataFuncionario.setEnabled(valor);
+        txt_data.setEnabled(valor);
     }
     
-    final void popularClienteBeans(){
-        FuncionarioB.setNome(txtNomeFuncionario.getText());
-        FuncionarioB.set
-        FuncionarioB.setDataCad(txtDataFuncionario.getText());
+    final void popularFuncionarioBeans(){
+        FuncionarioB.setNome(txtNome.getText());
+        FuncionarioB.setCargo(cb_cargo.getSelectedItem().toString());
+        FuncionarioB.setDataCad(txt_data.getText());
     }
     
     final void LimparCampos(){
-        txtCodigoFuncionario.setText("");
-        txtNomeFuncionario.setText("");
+        txtCodigo.setText("");
+        txtNome.setText("");
         cb_cargo.setSelectedIndex(1);
-        txtDataFuncionario.setText("");
+        txt_data.setText("");
     }
 
 
